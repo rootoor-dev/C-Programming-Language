@@ -8,6 +8,7 @@ C Programming Language (ANSI-C, MISTRA-C, ...) how it should be taught to new le
 - les types (types primitifs, size_t, pointeurs, enum, unions, structures[enregistrement,record],tableaux[1D,2D,3D,ND] statiques et tableaux dynamiques,complexes et hybrides[melanges de tout ce qui precede], void, void*]
 - const, auto, static, extern, register
 
+- pointeurs et travail sur la variable directement au lieu de la copie de cette variable
 - pointeurs et pointeurs de fonctions
 - POO en C
 
