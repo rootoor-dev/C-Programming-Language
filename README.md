@@ -3,9 +3,19 @@ C Programming Language (ANSI-C, MISTRA-C, ...) how it should be taught to new le
 - [French version](https://github.com/rootoor-dev/C-Programming-Language/blob/main/Apprendre-le-langage-C.md)
 - [English version](https://github.com/rootoor-dev/C-Programming-Language/blob/main/Learn-to-program-in-C.md)
 
+# Plan
+- histoire du C
+- les types (types primitifs, pointeurs, enum, unions, structures[enregistrement,record],tableaux[1D,2D,3D,ND],complexes et hybrides[melanges de tout ce qui precede], void, void*]
+- 
+- 
+- POO en C
 
 # Sources
 
+- [https://zestedesavoir.com/tutoriels/755/le-langage-c-1/](https://zestedesavoir.com/tutoriels/755/le-langage-c-1/)
+- []()
+- []()
+- []()
 - []()
 - []()
 - []()
@@ -24,17 +34,17 @@ C Programming Language (ANSI-C, MISTRA-C, ...) how it should be taught to new le
 - [https://rperrot.developpez.com/articles/c/genericite/](https://rperrot.developpez.com/articles/c/genericite/)
 - [https://www.dil.univ-mrs.fr/~regis/prog/cm/prog.cm-07.genericite.pdf](https://www.dil.univ-mrs.fr/~regis/prog/cm/prog.cm-07.genericite.pdf)
 - [https://perso.univ-lyon1.fr/marc.buffat/COURS/C_HTML/node1.html](https://perso.univ-lyon1.fr/marc.buffat/COURS/C_HTML/node1.html)
+- [https://blog.alphorm.com/pointeurs-fonctions-c-flexibilite-dynamique](https://blog.alphorm.com/pointeurs-fonctions-c-flexibilite-dynamique)
+- [https://www.ibm.com/docs/fr/i/7.5?topic=functions-pointers](https://www.ibm.com/docs/fr/i/7.5?topic=functions-pointers)
+- [https://fr.wikibooks.org/wiki/Programmation_C-C%2B%2B/Pointeurs_et_r%C3%A9f%C3%A9rences_de_fonctions](https://fr.wikibooks.org/wiki/Programmation_C-C%2B%2B/Pointeurs_et_r%C3%A9f%C3%A9rences_de_fonctions)
+- [https://emmanuel-delahaye.developpez.com/tutoriels/c/notes-langage-c/?page=les-pointeurs-demythifies](https://emmanuel-delahaye.developpez.com/tutoriels/c/notes-langage-c/?page=les-pointeurs-demythifies)
 - []()
 - []()
 - []()
 - []()
 - []()
 - []()
-- []()
-- []()
-- []()
-- []()
-- []()
+- [https://zestedesavoir.com/articles/2505/les-bizarreries-du-langage-c-1/](https://zestedesavoir.com/articles/2505/les-bizarreries-du-langage-c-1/)
 - []()
 - []()
 - []()
