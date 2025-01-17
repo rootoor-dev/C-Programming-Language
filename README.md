@@ -6,7 +6,7 @@ C Programming Language (ANSI-C, MISTRA-C, ...) how it should be taught to new le
 # Plan
 - histoire du C
 - les types (types primitifs, size_t, pointeurs, enum, unions, structures[enregistrement,record],tableaux[1D,2D,3D,ND],complexes et hybrides[melanges de tout ce qui precede], void, void*]
-- 
+- const, auto, static, extern, register
 - 
 - POO en C
 
