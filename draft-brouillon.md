@@ -330,9 +330,137 @@ int main() {
 ✔️ Pour **éviter des modifications accidentelles**, utilisez **`const`**.  
 ✔️ **Toujours vérifier les pointeurs** avant de les utiliser (`if (ptr == NULL) { return; }`).  
 
-Besoin d'exemples plus avancés ? 😃
+# 📌 **Relation entre le Type de Retour d'une Fonction et le mode de Passage des Valeurs**
+En C, le **type de retour** d'une fonction et le **mode de passage des arguments** sont liés dans la manière dont les données sont manipulées et retournées à l'appelant.  
 
+---
 
+## 🔹 **1. Fonction retournant une valeur (Passage par Valeur)**
+Lorsqu'une fonction retourne une valeur, **une copie** du résultat est renvoyée à l'appelant.  
+🔹 Cela est typique pour les **types primitifs** (`int`, `float`, `char`, etc.).
+
+### ✅ **Exemple (Retour d'un entier)**
+```c
+#include <stdio.h>
+
+int carre(int x) {  // x est passé par valeur
+    return x * x;   // Retourne une nouvelle valeur (copie)
+}
+
+int main() {
+    int nombre = 5;
+    int resultat = carre(nombre); // Une copie du résultat est stockée
+    printf("Carré : %d\n", resultat); // Affiche 25
+    return 0;
+}
+```
+🟢 **Explication** :
+- `x` est **copié** dans `carre()`, donc `nombre` ne change pas.
+- La fonction **retourne un nouvel entier** qui est **copié** dans `resultat`.
+
+**📌 Relation** : Passage par valeur + Retour par valeur = **pas d'impact sur l'original**.
+
+---
+
+## 🔹 **2. Fonction modifiant une valeur (Passage par Adresse)**
+Si une fonction doit **modifier un argument**, elle doit recevoir son **adresse** avec un pointeur.
+
+### ✅ **Exemple (Modification via adresse)**
+```c
+#include <stdio.h>
+
+void doubler(int *x) {  // x est un pointeur
+    *x = *x * 2;  // Modifie directement l'original
+}
+
+int main() {
+    int nombre = 5;
+    doubler(&nombre);  // Passe l'adresse de nombre
+    printf("Double : %d\n", nombre); // Affiche 10
+    return 0;
+}
+```
+🟢 **Explication** :
+- `x` pointe vers `nombre`, donc `*x = *x * 2` modifie `nombre`.
+- Pas besoin de **retourner** une valeur : la modification est directe.
+
+**📌 Relation** : Passage par adresse + Pas de retour = **l'original est modifié**.
+
+---
+
+## 🔹 **3. Fonction retournant un pointeur (Optimisation pour les gros objets)**
+Quand une fonction doit retourner **une grosse structure**, la retourner **par adresse** évite une copie inutile.
+
+### ✅ **Exemple (Retour d'un pointeur vers une structure)**
+```c
+#include <stdio.h>
+
+typedef struct {
+    int longueur;
+    int largeur;
+} Rectangle;
+
+Rectangle *creerRectangle(int l, int L) {
+    static Rectangle r;  // Variable statique (existe après la fin de la fonction)
+    r.longueur = l;
+    r.largeur = L;
+    return &r;  // Retourne un pointeur vers la structure
+}
+
+int main() {
+    Rectangle *rect = creerRectangle(10, 5);
+    printf("Dimensions : %d x %d\n", rect->longueur, rect->largeur);
+    return 0;
+}
+```
+🟢 **Explication** :
+- La fonction retourne **l’adresse** d’un `Rectangle`, au lieu de **copier** un gros objet.
+- `static` permet d’éviter le problème de mémoire temporaire.
+
+**📌 Relation** : Passage par valeur + Retour par adresse = **évite la copie inutile**.
+
+---
+
+## 🔹 **4. Fonction retournant plusieurs valeurs (Avec Passage par Adresse)**
+Une fonction peut retourner **plusieurs valeurs** en utilisant des pointeurs.
+
+### ✅ **Exemple (Retour de plusieurs valeurs via pointeurs)**
+```c
+#include <stdio.h>
+
+void division(int a, int b, int *quotient, int *reste) {
+    *quotient = a / b;
+    *reste = a % b;
+}
+
+int main() {
+    int q, r;
+    division(10, 3, &q, &r);
+    printf("Quotient: %d, Reste: %d\n", q, r); // Affiche 3 et 1
+    return 0;
+}
+```
+🟢 **Explication** :
+- `*quotient` et `*reste` permettent de stocker **deux valeurs** sans retour multiple.
+
+**📌 Relation** : Passage par adresse + Pas de retour = **permet plusieurs sorties**.
+
+---
+
+## 🎯 **Résumé des Relations**
+| Type de Passage | Type de Retour | Impact |
+|----------------|--------------|--------|
+| **Par Valeur** (`int x`) | Par Valeur (`int`) | Retourne une **copie** (original inchangé) |
+| **Par Adresse** (`int *x`) | Aucun (`void`) | **Modifie directement** l'original |
+| **Par Adresse** (`int *x`) | Par Adresse (`int*`) | **Optimisation** pour objets volumineux |
+| **Par Adresse** (`int *x, int *y`) | Aucun (`void`) | Permet de retourner **plusieurs valeurs** |
+
+💡 **Bonnes pratiques** :  
+✔️ **Retournez par valeur** si la copie est peu coûteuse.  
+✔️ **Utilisez des pointeurs** pour modifier des variables ou retourner de grands objets.  
+✔️ **Faites attention aux pointeurs retournés**, utilisez `static` ou `malloc()` si nécessaire.  
+
+Besoin d'autres exemples ? 😊
 
 
 
