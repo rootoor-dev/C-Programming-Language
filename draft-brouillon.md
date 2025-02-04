@@ -214,6 +214,227 @@ void afficherTableau(const int *tab, int taille) {
 
 # Les Fonctions avec ou sans type de retour
 
+### 📌 **Le Rapport entre les Fonctions avec ou sans Type de Retour et les Modes de Passage des Valeurs en C Moderne**
+
+En C, une fonction peut avoir un **type de retour** (`int`, `float`, `char *`, etc.) ou **ne pas en avoir** (`void`). Le mode de passage des arguments (**par valeur**, **par adresse**, ou **par "référence" via un pointeur constant**) influence la manière dont la fonction interagit avec ses paramètres et gère la mémoire.
+
+---
+
+## 🔹 **1. Fonctions sans Type de Retour (`void`)**
+Ces fonctions sont souvent des **setters** ou des **fonctions utilitaires** qui modifient des valeurs ou effectuent des actions sans renvoyer de résultat.
+
+### ✅ **Passage par valeur avec `void`**  
+- **Utilisation :** Lorsque la fonction n'a pas besoin de modifier l'argument original.
+- **Inconvénient :** La copie de l'argument empêche toute modification persistante.
+
+**Exemple :**
+```c
+#include <stdio.h>
+
+void increment(int x) {  // x est une copie
+    x++;  // Modifie la copie, pas l'original
+}
+
+int main() {
+    int a = 5;
+    increment(a);  
+    printf("%d\n", a);  // Affiche 5, pas modifié
+    return 0;
+}
+```
+
+---
+
+### ✅ **Passage par adresse (`pointeur`) avec `void`**  
+- **Utilisation :** Lorsqu'il faut **modifier la valeur originale**.
+- **Inconvénient :** Nécessite d'utiliser `*` et `&`, et d'éviter les erreurs de pointeurs `NULL`.
+
+**Exemple :**
+```c
+#include <stdio.h>
+
+void increment(int *x) {  
+    (*x)++;  // Modifie directement l'original
+}
+
+int main() {
+    int a = 5;
+    increment(&a);  // Passe l'adresse
+    printf("%d\n", a);  // Affiche 6
+    return 0;
+}
+```
+
+---
+
+### ✅ **Passage par "référence" (`const` pointeur) avec `void`**  
+- **Utilisation :** Pour **éviter la copie** d'objets volumineux sans les modifier.
+- **Inconvénient :** Ne permet **aucune modification** des données.
+
+**Exemple :**
+```c
+#include <stdio.h>
+
+void printArray(const int *arr, int size) {  
+    for (int i = 0; i < size; i++) {
+        printf("%d ", arr[i]);  
+    }
+    printf("\n");
+}
+
+int main() {
+    int tab[] = {1, 2, 3, 4, 5};
+    printArray(tab, 5);  // Ne modifie pas tab
+    return 0;
+}
+```
+
+---
+
+## 🔹 **2. Fonctions avec un Type de Retour**
+Ces fonctions retournent une **valeur calculée** ou **une référence** à un objet modifié.
+
+### ✅ **Passage par valeur avec un retour de valeur**  
+- **Utilisation :** Quand on veut **calculer un résultat** sans modifier l'original.
+- **Inconvénient :** Peut être inefficace pour les **structures volumineuses**.
+
+**Exemple :**
+```c
+#include <stdio.h>
+
+int carre(int x) {  
+    return x * x;  
+}
+
+int main() {
+    int a = 5;
+    int result = carre(a);  
+    printf("%d\n", result);  // Affiche 25
+    return 0;
+}
+```
+
+---
+
+### ✅ **Passage par adresse (`pointeur`) avec un retour de valeur**  
+- **Utilisation :** Quand il faut **modifier l'argument** et **retourner un résultat**.
+- **Inconvénient :** Complexité syntaxique avec `*` et `&`.
+
+**Exemple :**
+```c
+#include <stdio.h>
+
+int doubler(int *x) {  
+    (*x) *= 2;  // Modifie l'original
+    return *x;  // Retourne la nouvelle valeur
+}
+
+int main() {
+    int a = 5;
+    int result = doubler(&a);  
+    printf("%d\n", a);   // Affiche 10
+    printf("%d\n", result);  // Affiche 10
+    return 0;
+}
+```
+
+---
+
+### ✅ **Passage par "référence" (`const` pointeur) avec un retour de valeur**  
+- **Utilisation :** Quand une fonction doit lire des **données volumineuses** sans les modifier.
+- **Inconvénient :** L'original **ne peut pas être modifié**.
+
+**Exemple :**
+```c
+#include <stdio.h>
+
+float moyenne(const int *arr, int size) {  
+    int somme = 0;
+    for (int i = 0; i < size; i++) {
+        somme += arr[i];
+    }
+    return (float)somme / size;
+}
+
+int main() {
+    int notes[] = {12, 14, 16, 18, 20};
+    printf("Moyenne : %.2f\n", moyenne(notes, 5));  
+    return 0;
+}
+```
+
+---
+
+## 📌 **Comparaison rapide :**
+| Type de passage | Copie des données ? | Peut modifier l'original ? | Type de retour possible | Utilisation principale |
+|----------------|-----------------|----------------------|----------------|------------------|
+| **Par valeur** (`int x`) | ✅ Oui | ❌ Non | `void` ou valeur | Petits types (`int`, `float`) |
+| **Par adresse** (`int *x`) | ❌ Non | ✅ Oui | `void` ou valeur | Modifications, gros objets |
+| **Par "référence" (`const int *x`)** | ❌ Non | ❌ Non | `void` ou valeur | Lecture sécurisée, optimisation |
+
+---
+
+## 🎯 **Résumé : Quand choisir quoi ?**
+- ✅ **Petit objet (int, float, char, etc.)** → Passage **par valeur**.
+- ✅ **Objet volumineux ou modification requise** → Passage **par adresse**.
+- ✅ **Lecture seule d'un gros objet** → Passage **par "référence" (`const Type *`)**.
+- ✅ **Retour d'un résultat calculé** → Retour **par valeur**.
+- ✅ **Modification et retour d'une valeur** → Passage **par adresse et retour de valeur**.
+
+---
+
+💡 **Bonnes pratiques** :
+✔️ Évitez les copies inutiles, **passez par adresse** pour les objets volumineux.  
+✔️ **Utilisez `const`** pour garantir l'immutabilité si vous ne modifiez pas l'argument.  
+✔️ Vérifiez toujours les **pointeurs `NULL`** pour éviter des erreurs (`if (ptr == NULL) return;`).  
+
+---
+
+### **Exemple final : Tous les cas combinés**
+```c
+#include <stdio.h>
+
+void modifier(int *x) {  
+    (*x) *= 2;  
+}
+
+int calculer(int x) {  
+    return x * x;  
+}
+
+void afficher(const int *arr, int size) {  
+    for (int i = 0; i < size; i++) {
+        printf("%d ", arr[i]);
+    }
+    printf("\n");
+}
+
+int main() {
+    int a = 5;
+    int tableau[] = {1, 2, 3, 4, 5};
+
+    modifier(&a);  
+    printf("Valeur modifiée : %d\n", a);  
+
+    int carre = calculer(a);  
+    printf("Carré : %d\n", carre);  
+
+    afficher(tableau, 5);  
+
+    return 0;
+}
+```
+
+---
+
+
+
+
+
+
+
+
+
 
 # Le rapport entre les fonctions avec ou sans types de retour et les modes de passage des valeurs
 
