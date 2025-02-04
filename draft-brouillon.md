@@ -212,6 +212,176 @@ void afficherTableau(const int *tab, int taille) {
 ✔️ **Utilisez `const`** pour protéger les données en lecture seule.  
 ✔️ **Toujours vérifier les pointeurs** (`if (ptr == NULL) { return; }`).  
 
+# Les Fonctions avec ou sans type de retour
+
+
+# Le rapport entre les fonctions avec ou sans types de retour et les modes de passage des valeurs
+
+Voici une analyse complète des différents modes de passage d'arguments en fonction de si la fonction **renvoie une valeur** ou **n'en renvoie pas**. Nous allons explorer les trois modes principaux (passage par valeur, passage par adresse et passage par référence simulé) dans ces deux contextes.
+
+---
+
+### 1. **Fonction qui ne renvoie pas de valeur (`void`)**
+Lorsqu'une fonction retourne `void`, elle n'a pas de résultat explicite à fournir. Elle est utilisée pour produire des effets de bord, comme modifier des variables externes ou effectuer des opérations sans retourner de donnée.
+
+#### a) **Passage par Valeur avec `void`**
+- **Comportement :** Une copie de l'argument est transmise à la fonction. Les modifications apportées à cette copie n'affectent pas la variable originale.
+- **Utilisation :** Pour effectuer des calculs ou des actions internes sans modifier les données externes.
+- **Exemple :**
+```c
+void afficherCarre(int x) {
+    printf("Le carré de %d est %d\n", x, x * x);
+}
+
+int main() {
+    int a = 5;
+    afficherCarre(a); // Affiche "Le carré de 5 est 25"
+    printf("a = %d\n", a); // Résultat : 5 (non modifié)
+    return 0;
+}
+```
+- **Remarque :** La variable `a` reste inchangée car seule une copie est manipulée.
+
+---
+
+#### b) **Passage par Adresse avec `void`**
+- **Comportement :** L'adresse de la variable est passée à la fonction, permettant de modifier directement la variable originale.
+- **Utilisation :** Pour modifier des variables externes ou passer des structures volumineuses sans copie.
+- **Exemple :**
+```c
+void doublerAdresse(int *x) {
+    (*x) *= 2;
+}
+
+int main() {
+    int a = 5;
+    doublerAdresse(&a); // Modification directe de 'a'
+    printf("a = %d\n", a); // Résultat : 10 (modifié)
+    return 0;
+}
+```
+- **Remarque :** La variable `a` est modifiée car son adresse a été passée à la fonction.
+
+---
+
+#### c) **Passage par Référence Simulé avec `void`**
+- **Comportement :** Identique au passage par adresse, mais souvent utilisé pour clarifier que la fonction travaille sur la variable originale.
+- **Utilisation :** Pour des fonctions où la modification externe est clairement intentionnelle.
+- **Exemple :**
+```c
+void doublerReference(int *x) {
+    (*x) *= 2;
+}
+
+int main() {
+    int a = 5;
+    doublerReference(&a); // Modification via un pointeur
+    printf("a = %d\n", a); // Résultat : 10 (modifié)
+    return 0;
+}
+```
+- **Remarque :** Ce mode est simplement une manière de simuler le passage par référence en C.
+
+---
+
+### 2. **Fonction qui renvoie une valeur**
+Lorsqu'une fonction retourne une valeur, elle peut fournir un résultat explicite. Le choix du mode de passage dépend de si vous voulez conserver ou non la variable originelle inchangée.
+
+#### a) **Passage par Valeur avec Retour**
+- **Comportement :** Une copie de l'argument est transmise à la fonction, et le résultat est renvoyé via le type de retour.
+- **Utilisation :** Pour capturer un résultat sans modifier la variable originelle.
+- **Exemple :**
+```c
+int doublerValeur(int x) {
+    return x * 2; // Renvoie le double de la valeur
+}
+
+int main() {
+    int a = 5;
+    int b = doublerValeur(a); // Résultat capturé dans 'b'
+    printf("a = %d\n", a); // Résultat : 5 (non modifié)
+    printf("b = %d\n", b); // Résultat : 10 (le double de 'a')
+    return 0;
+}
+```
+- **Remarque :** La variable `a` reste inchangée, mais le résultat est capturé dans une nouvelle variable `b`.
+
+---
+
+#### b) **Passage par Adresse avec Retour**
+- **Comportement :** L'adresse de la variable est passée à la fonction, permettant de modifier directement la variable originale. Le type de retour peut être utilisé pour fournir un statut ou une autre valeur.
+- **Utilisation :** Pour modifier une variable externe tout en fournissant un résultat supplémentaire.
+- **Exemple :**
+```c
+int incrementerEtRetourner(int *x) {
+    (*x)++; // Modification directe
+    return *x; // Renvoie la nouvelle valeur
+}
+
+int main() {
+    int a = 5;
+    int b = incrementerEtRetourner(&a); // Modifie 'a' et renvoie la nouvelle valeur
+    printf("a = %d\n", a); // Résultat : 6 (modifié)
+    printf("b = %d\n", b); // Résultat : 6 (même valeur)
+    return 0;
+}
+```
+- **Remarque :** La variable `a` est modifiée, et le résultat est également renvoyé via le type de retour.
+
+---
+
+#### c) **Passage par Référence Simulé avec Retour**
+- **Comportement :** Identique au passage par adresse avec retour, mais souvent utilisé pour clarifier que la fonction travaille sur la variable originale tout en fournissant un résultat.
+- **Utilisation :** Pour des fonctions où la modification externe et le retour sont intentionnels.
+- **Exemple :**
+```c
+int doublerEtRetourner(int *x) {
+    (*x) *= 2; // Modification directe
+    return *x; // Renvoie la nouvelle valeur
+}
+
+int main() {
+    int a = 5;
+    int b = doublerEtRetourner(&a); // Modifie 'a' et renvoie la nouvelle valeur
+    printf("a = %d\n", a); // Résultat : 10 (modifié)
+    printf("b = %d\n", b); // Résultat : 10 (même valeur)
+    return 0;
+}
+```
+- **Remarque :** Ce mode combine modification externe et retour de valeur.
+
+---
+
+### 3. **Résumé des Modes de Passage**
+
+| Mode de Passage         | Fonction `void`              | Fonction avec Retour       |
+|-------------------------|------------------------------|----------------------------|
+| **Passage par Valeur**   | Copie locale, pas de modification externe | Copie locale, résultat renvoyé |
+| **Passage par Adresse**  | Modification externe possible | Modification externe + retour de valeur |
+| **Passage par Référence**| Modification externe possible | Modification externe + retour de valeur |
+
+---
+
+### 4. **Choix du Mode selon les Besoins**
+
+| Objectif                          | Mode de Passage Recommandé          |
+|-----------------------------------|--------------------------------------|
+| Ne pas modifier la variable originelle | Passage par Valeur                   |
+| Modifier la variable originelle     | Passage par Adresse ou Référence Simulé |
+| Capturer un résultat               | Fonction avec Retour                 |
+| Modifier et capturer un résultat   | Passage par Adresse avec Retour      |
+
+---
+
+### Conclusion
+
+Le choix du mode de passage dépend de vos besoins spécifiques :
+- Si vous voulez **éviter toute modification externe**, utilisez le **passage par valeur**.
+- Si vous voulez **modifier une variable externe**, utilisez le **passage par adresse** ou le **passage par référence simulé**.
+- Si vous voulez **capturer un résultat**, définissez une fonction avec un type de retour approprié.
+- Enfin, si vous avez besoin à la fois de **modifier une variable externe et de capturer un résultat**, combinez le **passage par adresse** avec un type de retour. 
+
+Cette approche garantit une utilisation efficace et claire des différents modes de passage en fonction du comportement attendu.
 
 # Retour sur les passages par valeur, par adresse (via un pointeur) et par référence
 
